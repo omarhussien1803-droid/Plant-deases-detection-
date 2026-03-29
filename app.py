@@ -3,7 +3,7 @@ import tensorflow as tf
 from PIL import Image
 import numpy as np
 
-# 1. Maqaawwan dhibee hunda (PlantVillage standard 38 labels)
+# Maqaawwan dhibee hunda (PlantVillage standard 38 labels)
 class_names = {
     0: "Apple Scab", 1: "Apple Black Rot", 2: "Apple Cedar Rust", 3: "Apple Healthy",
     4: "Blueberry Healthy", 5: "Cherry Powdery Mildew", 6: "Cherry Healthy",
@@ -24,7 +24,6 @@ st.title("AI Dhibee Biqiltootaa Addaan Baasu")
 
 @st.cache_resource
 def load_my_model():
-    # Faayila .h5 kee GitHub irratti fe'ame sana dubbisa
     return tf.keras.models.load_model('mira_plant_model.h5')
 
 model = load_my_model()
@@ -35,15 +34,12 @@ if file:
     img = Image.open(file).convert('RGB').resize((224, 224))
     st.image(img, caption="Suuraa qoratamanif dhiyaate")
     
-    # AI'n akka tilmaamu gochuu
     x = np.array(img) / 255.0
     x = np.expand_dims(x, axis=0)
     
     prediction = model.predict(x)
     
-    # 'Model' kee output dhibee qofa yoo ta'e
     label = np.argmax(prediction)
     maqaa = class_names.get(label, "Dhibee hin beekamne")
     
     st.success(f"AI'n kee akka jedhutti: **{maqaa}**")
-
